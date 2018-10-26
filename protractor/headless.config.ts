@@ -6,6 +6,9 @@ export const config: Config = {
   specs: ['../test/*.spec.js'],
   SELENIUM_PROMISE_MANAGER: false,
   getPageTimeout: 500,
+  jasmineNodeOpts: {
+    defaultTimeoutInterval: 120000
+  },
   capabilities: {
     browserName: 'chrome',
     chromeOptions: {

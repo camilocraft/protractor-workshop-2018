@@ -11,33 +11,61 @@ import {
   SignInStepPage,
   SummaryStepPage } from '../src/page';
 
-describe('Buy a t-shirt', () => {
-  const addressStepPage: AddressStepPage = new AddressStepPage();
-  const bankPaymentPage: BankPaymentPage = new BankPaymentPage();
-  const menuContentPage: MenuContentPage = new MenuContentPage();
-  const orderConfirmationPage: OrderConfirmationPage = new OrderConfirmationPage();
-  const paymentStepPage: PaymentStepPage = new PaymentStepPage();
-  const productAddedModalPage: ProductAddedModalPage = new ProductAddedModalPage();
-  const productListPage: ProductListPage = new ProductListPage();
-  const shippingStepPage: ShippingStepPage = new ShippingStepPage();
-  const signInStepPage: SignInStepPage = new SignInStepPage();
-  const summaryStepPage: SummaryStepPage = new SummaryStepPage();
+describe('Scenario: Buy a T-shirt', () => {
 
-  it('then should be bought a t-shirt', async () => {
+  describe('When client open the navigation page', () => {
+    beforeEach(async () => {
+      await browser.get('http://automationpractice.com/');
+    });
 
-    const expectedResult = 'Your order on My Store is complete.';
+    describe('and selects a T-Shirt', () => {
+      beforeEach(async () => {
+        const menuContentPage: MenuContentPage = new MenuContentPage();
+        const productListPage: ProductListPage = new ProductListPage();
+        const productAddedModalPage: ProductAddedModalPage = new ProductAddedModalPage();
+        const summaryStepPage: SummaryStepPage = new SummaryStepPage();
 
-    await browser.get('http://automationpractice.com/');
+        await menuContentPage.goToTShirtMenu();
+        await productListPage.addToCar();
+        await productAddedModalPage.proceedToCheckout();
+        await summaryStepPage.proceedToCheckout();
+      });
 
-    await menuContentPage.goToTShirtMenu();
-    await productListPage.addToCar();
-    await productAddedModalPage.proceedToCheckout();
-    await summaryStepPage.proceedToCheckout();
-    await signInStepPage.signIn('aperdomobo@gmail.com', 'WorkshopProtractor');
-    await addressStepPage.proceedToCheckout();
-    await shippingStepPage.acceptTermsAndProceedToCheckout();
-    await paymentStepPage.payByBankWire();
-    await bankPaymentPage.confirmOrder();
-    await expect(orderConfirmationPage.getConfirmationMessage()).toBe(expectedResult);
+      describe('and Log in', () => {
+        beforeEach(async () => {
+          const signInStepPage: SignInStepPage = new SignInStepPage();
+          await signInStepPage.signIn('aperdomobo@gmail.com', 'WorkshopProtractor');
+        });
+
+        describe('and fill delivery information', () => {
+          beforeEach(async () => {
+            const addressStepPage: AddressStepPage = new AddressStepPage();
+            const shippingStepPage: ShippingStepPage = new ShippingStepPage();
+
+            await addressStepPage.proceedToCheckout();
+            await shippingStepPage.acceptTermsAndProceedToCheckout();
+          });
+
+          describe('and pay the order ', () => {
+            const expectedResult = 'Your order on My Store is complete.';
+
+            beforeEach(async () => {
+              const bankPaymentPage: BankPaymentPage = new BankPaymentPage();
+              const paymentStepPage: PaymentStepPage = new PaymentStepPage();
+              await paymentStepPage.payByBankWire();
+              await bankPaymentPage.confirmOrder();
+            });
+
+            it('then should be bought a t-shirt', async () => {
+              const orderConfirmationPage: OrderConfirmationPage = new OrderConfirmationPage();
+              await expect(orderConfirmationPage.getConfirmationMessage()).toBe(expectedResult);
+            });
+          });
+        });
+
+      });
+    });
+
   });
+
 });

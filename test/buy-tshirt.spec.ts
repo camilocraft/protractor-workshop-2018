@@ -11,14 +11,14 @@ import {
   SignInStepPage,
   SummaryStepPage } from '../src/page';
 
-describe('Buy a t-shirt', () => {
+describe('Scenario: Buy a T-shirt', () => {
 
-  describe('Buy T-Shirt', () => {
+  describe('When client open the navigation page', () => {
     beforeEach(async () => {
       await browser.get('http://automationpractice.com/');
     });
 
-    describe('Select T-Shirt', () => {
+    describe('and selects a T-Shirt', () => {
       beforeEach(async () => {
         const menuContentPage: MenuContentPage = new MenuContentPage();
         const productListPage: ProductListPage = new ProductListPage();
@@ -31,27 +31,30 @@ describe('Buy a t-shirt', () => {
         await summaryStepPage.proceedToCheckout();
       });
 
-      describe('Log in', () => {
+      describe('and Log in', () => {
         beforeEach(async () => {
           const signInStepPage: SignInStepPage = new SignInStepPage();
           await signInStepPage.signIn('aperdomobo@gmail.com', 'WorkshopProtractor');
         });
 
-        describe('Fill delivery information', () => {
+        describe('and fill delivery information', () => {
           beforeEach(async () => {
             const addressStepPage: AddressStepPage = new AddressStepPage();
-            const bankPaymentPage: BankPaymentPage = new BankPaymentPage();
-            const paymentStepPage: PaymentStepPage = new PaymentStepPage();
             const shippingStepPage: ShippingStepPage = new ShippingStepPage();
 
             await addressStepPage.proceedToCheckout();
             await shippingStepPage.acceptTermsAndProceedToCheckout();
-            await paymentStepPage.payByBankWire();
-            await bankPaymentPage.confirmOrder();
           });
 
-          describe('Pay T-Shirt', () => {
+          describe('and pay the order ', () => {
             const expectedResult = 'Your order on My Store is complete.';
+
+            beforeEach(async () => {
+              const bankPaymentPage: BankPaymentPage = new BankPaymentPage();
+              const paymentStepPage: PaymentStepPage = new PaymentStepPage();
+              await paymentStepPage.payByBankWire();
+              await bankPaymentPage.confirmOrder();
+            });
 
             it('then should be bought a t-shirt', async () => {
               const orderConfirmationPage: OrderConfirmationPage = new OrderConfirmationPage();

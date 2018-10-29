@@ -4,7 +4,7 @@ export class OrderConfirmationPage {
   private element: ElementFinder;
 
   constructor () {
-    this.element = $('#center_column > div > p > strong');
+    this.element = $('.cheque-indent strong');
   }
 
   public async getConfirmationMessage(): Promise<string> {

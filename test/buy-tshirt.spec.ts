@@ -20,13 +20,14 @@ describe('Scenario: Buy a T-shirt', () => {
 
     describe('and selects a T-Shirt', () => {
       beforeEach(async () => {
+        const tShirtName = 'Faded Short Sleeve T-shirts';
         const menuContentPage: MenuContentPage = new MenuContentPage();
         const productListPage: ProductListPage = new ProductListPage();
         const productAddedModalPage: ProductAddedModalPage = new ProductAddedModalPage();
         const summaryStepPage: SummaryStepPage = new SummaryStepPage();
 
         await menuContentPage.goToTShirtMenu();
-        await productListPage.addToCar();
+        await productListPage.selectProduct(tShirtName);
         await productAddedModalPage.proceedToCheckout();
         await summaryStepPage.proceedToCheckout();
       });
